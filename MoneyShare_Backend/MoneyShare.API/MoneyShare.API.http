@@ -1,0 +1,6 @@
+@MoneyShare.API_HostAddress = http://localhost:5031
+
+GET {{MoneyShare.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

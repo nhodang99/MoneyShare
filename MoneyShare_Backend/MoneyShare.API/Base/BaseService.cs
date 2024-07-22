@@ -1,20 +1,19 @@
-﻿using MoneyShare.API.Interfaces;
-using MoneyShare.Domain.Base;
-using MoneyShare.Domain.Bills;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using MoneyShare.API.Interfaces;
 using MoneyShare.Domain.Interfaces;
 
-namespace MoneyShare.API.Services
+namespace MoneyShare.API.Base
 {
     public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IRepository<TEntity> _repository;
+        protected readonly IUnitOfWork _unitOfWork;
+        protected readonly IRepository<TEntity> _repository;
 
         public BaseService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _repository = _unitOfWork.GetRepository<TEntity>();
-
         }
 
         public void Add(TEntity entity)
@@ -43,12 +42,13 @@ namespace MoneyShare.API.Services
             return _repository.Get(id);
         }
 
-        public void Update(TEntity newEntity)
+        public void Update(int id, TEntity updatedEntity)
         {
-            TEntity entity = _repository.Get(((IEntityBase<int>)newEntity).Id); // @TODO
+            var entity = _repository.Get(id);
             if (entity != null)
             {
-                _repository.Remove(entity);
+                _repository.GetEntry(entity).State = EntityState.Detached;
+                _repository.Update(updatedEntity);
                 _unitOfWork.Commit();
             }
         }

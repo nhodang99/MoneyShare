@@ -13,6 +13,6 @@ namespace MoneyShare.API.Interfaces
 
         void DeleteById(int id);
 
-        void Update(TEntity entity);
+        void Update(int id, TEntity entity);
     }
 }

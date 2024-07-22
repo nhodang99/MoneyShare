@@ -1,5 +1,6 @@
 ﻿using MoneyShare.Domain.Base;
 using MoneyShare.Domain.Users;
+using NSwag.Annotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using Group = MoneyShare.Domain.Groups.Group;
@@ -20,7 +21,7 @@ namespace MoneyShare.Domain.Bills
 
         [ForeignKey(nameof(GroupId))]
         public virtual Group Group { get; set; }
-
+        
         public virtual User Payer { get; set; }
     }
 

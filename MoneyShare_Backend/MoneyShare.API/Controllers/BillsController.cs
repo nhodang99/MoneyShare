@@ -1,49 +1,89 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MoneyShare.API.Services;
 using MoneyShare.Domain.Bills;
-using MoneyShare.Domain.Interfaces;
 
 namespace MoneyShare.API.Controllers
 {
     [ApiController]
+    [Route("/bills")]
     public class BillsController : ControllerBase
     {
-        public BillsService _service;
+        private readonly BillsService _service;
 
         public BillsController(BillsService service)
         {
             _service = service;
         }
 
-        [Route("/bills")]
         [HttpGet]
         public IEnumerable<Bill> GetBills()
         {
-            return _service.GetAllBills();
+            return _service.GetAll();
         }
 
-        [Route("/bills/{id}")]
+        [Route("{id}")]
         [HttpGet]
         public Bill GetBillById(int id)
         {
-            var bill = _service.GetBillById(id);
-            if (bill == null)
-            {
-                return new Bill();
-            }
-            return bill;
+            return _service.GetById(id);
         }
 
-        [Route("/bills")]
         [HttpPost]
         public IActionResult Add(Bill bill)
         {
             if (bill == null)
             {
-                return BadRequest("Bill invalid");
+                return BadRequest(bill);
             }
-            _service.AddBill(bill);
+            _service.Add(bill);
             return Ok(bill);
+        }
+
+        [Route("edit/{id}")]
+        [HttpPost]
+        public IActionResult Edit(int id, Bill bill)
+        {
+            if (bill == null || id != bill.Id)
+            {
+                return BadRequest(bill);
+            }
+            _service.Update(id, bill);
+            return Ok(bill);
+        }
+
+        [Route("delete/{id}")]
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            var bill = _service.GetById(id);
+            if (bill != null)
+            {
+                _service.DeleteById(id);
+                return Ok(bill);
+            }
+            return NotFound();
+        }
+
+        [Route("group/{groupId}")]
+        [HttpGet]
+        public IEnumerable<Bill> GetBillsInGroup(int groupId)
+        {
+            return _service.GetBillsInGroup(groupId);
+        }
+
+        [Route("user/{userId}")]
+        [HttpGet]
+        public IEnumerable<Bill> GetBillsByUser(int userId)
+        {
+            return _service.GetBillsByUser(userId);
+        }
+
+        [Route("delete/group/{groupId}")]
+        [HttpPost]
+        public IActionResult DeleteBillsInGroup(int groupId)
+        {
+            _service.DeleteBillsInGroup(groupId);
+            return Ok();
         }
     }
 }

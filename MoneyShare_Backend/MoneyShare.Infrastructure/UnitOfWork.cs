@@ -44,6 +44,10 @@ namespace MoneyShare.Infrastructure
             {
                 return (IRepository<TEntity>) Groups;
             }
+            else if (typeof(TEntity) == typeof(Bill))
+            {
+                return (IRepository<TEntity>)Bills;
+            }
             else
             {
                 throw new ArgumentException("Unsupported entity type: " + typeof(TEntity).Name);

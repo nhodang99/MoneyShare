@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using MoneyShare.Domain.Bills;
 
 namespace MoneyShare.Infrastructure.Repositories
@@ -9,24 +10,23 @@ namespace MoneyShare.Infrastructure.Repositories
         {
         }
 
-        //public Bill GetBillsWithGroupAndUser(int id)
-        //{
-
-        //}
-
         public void DeleteAllBillsInGroup(int groupId)
         {
-            throw new NotImplementedException();
+            var bills = Find(b=> b.GroupId == groupId);
+            if (bills != null)
+            {
+                RemoveRange(bills);
+            }
         }
 
-        public IEnumerable<Bill> getAllBillsByUser(int userId)
+        public IEnumerable<Bill> GetAllBillsByUser(int userId)
         {
-            throw new NotImplementedException();
+            return Find(b => b.PayerId == userId).ToList();
         }
 
         public IEnumerable<Bill> GetAllBillsInGroup(int groupId)
         {
-            throw new NotImplementedException();
+            return Find(b => b.GroupId == groupId).ToList();
         }
 
         public AppDbContext AppDbContext => Context as AppDbContext;

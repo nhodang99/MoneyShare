@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Linq.Expressions;
 
 namespace MoneyShare.Domain.Interfaces
 {
@@ -15,5 +16,7 @@ namespace MoneyShare.Domain.Interfaces
         void RemoveRange(IEnumerable<TEntity> entities);
 
         void Update(TEntity entity);
+
+        EntityEntry GetEntry(TEntity entity);
     }
 }

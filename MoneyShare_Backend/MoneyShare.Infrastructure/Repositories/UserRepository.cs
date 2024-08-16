@@ -5,7 +5,7 @@ namespace MoneyShare.Infrastructure.Repositories
 {
     public class UserRepository : Repository<User>, IUserRepository
     {
-        public UserRepository(DbContext context) : base(context)
+        public UserRepository(AppDbContext context) : base(context)
         {
         }
 

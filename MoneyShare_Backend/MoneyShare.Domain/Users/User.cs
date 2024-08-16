@@ -20,10 +20,12 @@ namespace MoneyShare.Domain.Users
         public required string Password { get; set; }
 
         public virtual ICollection<Group_User>? Groups_Users { get; set; }
+        public virtual ICollection<Bill>? Bills { get; set; }
 
         public User()
         {
             Groups_Users = new HashSet<Group_User>();
+            Bills = new HashSet<Bill>();
         }
     }
 }

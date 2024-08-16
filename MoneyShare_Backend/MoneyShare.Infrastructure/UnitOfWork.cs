@@ -1,4 +1,5 @@
-﻿using MoneyShare.Domain.Base;
+﻿using Microsoft.EntityFrameworkCore;
+using MoneyShare.Domain.Base;
 using MoneyShare.Domain.Bills;
 using MoneyShare.Domain.Groups;
 using MoneyShare.Domain.Interfaces;
@@ -9,20 +10,16 @@ namespace MoneyShare.Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
+        private readonly AppDbContext _context;
+
+        private Dictionary<string, object> Repositories { get; }
+
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
-            Users = new UserRepository(_context);
-            Bills = new BillRepository(_context);
-            Groups = new GroupRepository(_context);
+
+            Repositories = new Dictionary<string, dynamic>();
         }
-
-        private readonly AppDbContext _context;
-        public IUserRepository Users { get; private set; }
-
-        public IBillRepository Bills { get; private set; }
-
-        public IGroupRepository Groups { get; private set; }
 
         public int Commit()
         {
@@ -34,23 +31,22 @@ namespace MoneyShare.Infrastructure
             _context.Dispose();
         }
 
-        public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class
+        // Get generic repository for an entity
+        public IRepository<TEntity> Repository<TEntity>() where TEntity : class
         {
-            if (typeof(TEntity) == typeof(User))
+            var typeName = typeof(TEntity).Name;
+
+            lock (Repositories)
             {
-                return (IRepository<TEntity>) Users;
-            }
-            else if (typeof(TEntity) == typeof(Group))
-            {
-                return (IRepository<TEntity>) Groups;
-            }
-            else if (typeof(TEntity) == typeof(Bill))
-            {
-                return (IRepository<TEntity>)Bills;
-            }
-            else
-            {
-                throw new ArgumentException("Unsupported entity type: " + typeof(TEntity).Name);
+                if (Repositories.TryGetValue(typeName, out object? value))
+                {
+                    return (IRepository<TEntity>)value;
+                }
+
+                var repository = new Repository<TEntity>(_context);
+
+                Repositories.Add(typeName, repository);
+                return repository;
             }
         }
     }

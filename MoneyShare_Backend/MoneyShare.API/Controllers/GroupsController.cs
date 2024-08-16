@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using MoneyShare.API.Base;
 using MoneyShare.API.Services;
-using MoneyShare.Domain.Bills;
 using MoneyShare.Domain.Groups;
 
 namespace MoneyShare.API.Controllers
@@ -37,7 +38,7 @@ namespace MoneyShare.API.Controllers
                 return BadRequest(group);
             }
             _service.Add(group);
-            return Ok(group);
+            return Created();
         }
 
         [Route("edit/{id}")]
@@ -65,11 +66,34 @@ namespace MoneyShare.API.Controllers
             return NotFound();
         }
 
-        // [Route("add/user/{id}")]
-        // [HttpPatch]
-        // public IActionResult AddUser(int id)
-        // {
-            // if (_)
-        // }
+        [Route("add_users")]
+        [HttpPost]
+        public IActionResult AddUsers([FromBody] GroupUserRequestBody reqBody)
+        {
+            if (reqBody.groupId == 0 || reqBody.UserIds.IsNullOrEmpty())
+            {
+                return UnprocessableEntity(reqBody);
+            }
+            if (!_service.AddUsers(reqBody))
+            {
+                return ValidationProblem(); // @TODO: Other status code more meaningful?
+            }
+            return NoContent();
+        }
+
+        [Route("remove_users")]
+        [HttpPost]
+        public IActionResult RemoveUsers([FromBody] GroupUserRequestBody reqBody)
+        {
+            if (reqBody.groupId == 0 || reqBody.UserIds.IsNullOrEmpty())
+            {
+                return UnprocessableEntity(reqBody);
+            }
+            if (!_service.RemoveUsers(reqBody))
+            {
+                return ValidationProblem(); // @TODO: Other status code more meaningful?
+            }
+            return NoContent();
+        }
     }
 }

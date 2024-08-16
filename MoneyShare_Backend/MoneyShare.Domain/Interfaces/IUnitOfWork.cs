@@ -7,10 +7,7 @@ namespace MoneyShare.Domain.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        IUserRepository Users { get; }
-        IBillRepository Bills { get; }
-        IGroupRepository Groups { get; }
-        public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class;
+        public IRepository<TEntity> Repository<TEntity>() where TEntity : class;
 
         int Commit();
     }

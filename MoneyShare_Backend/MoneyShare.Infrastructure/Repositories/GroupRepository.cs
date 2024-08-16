@@ -5,7 +5,7 @@ namespace MoneyShare.Infrastructure.Repositories
 {
     public class GroupRepository : Repository<Group>, IGroupRepository
     {
-        public GroupRepository(DbContext context) : base(context)
+        public GroupRepository(AppDbContext context) : base(context)
         {
         }
 

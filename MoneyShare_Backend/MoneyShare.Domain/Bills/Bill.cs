@@ -20,9 +20,9 @@ namespace MoneyShare.Domain.Bills
 
 
         [ForeignKey(nameof(GroupId))]
-        public virtual Group Group { get; set; }
+        public virtual Group? Group { get; set; }
         
-        public virtual User Payer { get; set; }
+        public virtual User? Payer { get; set; }
     }
 
     public enum BillStatus

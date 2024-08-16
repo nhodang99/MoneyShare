@@ -36,7 +36,7 @@ namespace MoneyShare.API.Controllers
                 return BadRequest(bill);
             }
             _service.Add(bill);
-            return Ok(bill);
+            return Created();
         }
 
         [Route("edit/{id}")]

@@ -1,21 +1,14 @@
-using MoneyShare.API.Extensions;
-using System.Text.Json.Serialization;
+using MoneyShare.Infrastructure;
+using MoneyShare.Application;
+using MoneyShare.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// To make swager do not showing Entity reference in loop
-builder.Services.AddControllers()
-    .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-
 // Add services
 builder.Services
-    .AddDatabase(builder.Configuration)
-    .AddRepositories()
-    .AddServices();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration)
+    .AddPresentation();
 
 var app = builder.Build();
 
@@ -27,8 +20,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
 
 app.MapControllers();
 

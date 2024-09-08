@@ -1,34 +1,17 @@
-﻿using MoneyShare.Domain.Base;
-using MoneyShare.Domain.Users;
-using NSwag.Annotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using SharedKernel;
+using System.ComponentModel.DataAnnotations;
 
-using Group = MoneyShare.Domain.Groups.Group;
+namespace MoneyShare.Domain.Bills;
 
-namespace MoneyShare.Domain.Bills
+public class Bill : AuditEntity
 {
-    [Table("Bills")]
-    public partial class Bill : AuditEntity<int>
-    {
-        public string Title { get; set; } = string.Empty;
-        public decimal Price { get; set; }
-        public BillStatus Status {  get; set; }
-        public int GroupId { get; set; }
+    [Required(ErrorMessage = "Bill title is required")]
+    public string Title { get; set; }
 
-        [ForeignKey("Users")]
-        public int PayerId { get; set; }
+    [Required(ErrorMessage = "Price is required")]
+    public decimal Price { get; set; }
+    public BillStatus Status { get; set; }
+    public Guid GroupId { get; set; }
 
-
-        [ForeignKey(nameof(GroupId))]
-        public virtual Group? Group { get; set; }
-        
-        public virtual User? Payer { get; set; }
-    }
-
-    public enum BillStatus
-    {
-        Pending,
-        Completed
-    }
-
+    public Guid PayerId { get; set; }
 }

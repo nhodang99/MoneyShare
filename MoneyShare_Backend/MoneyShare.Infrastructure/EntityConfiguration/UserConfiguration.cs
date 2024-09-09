@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MoneyShare.Domain.Users;
 
-namespace MoneyShare.Infrastructure.Users;
+namespace MoneyShare.Infrastructure.EntityConfiguration;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {

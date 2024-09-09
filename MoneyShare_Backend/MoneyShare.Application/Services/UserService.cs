@@ -1,25 +1,23 @@
 ﻿using MoneyShare.Application.Contracts.Interfaces;
-using MoneyShare.Domain.Users;
 using MoneyShare.Domain.Bills;
-using MoneyShare.Domain.Repositories;
 using MoneyShare.Application.Contracts.DTOs;
+using MoneyShare.Domain;
 
 namespace MoneyShare.Application.Services;
 
 public class UserService : IUserService
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IRepository<User> _userRepository;
 
     public UserService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
-        _userRepository = _unitOfWork.Repository<User>();
     }
 
+    // Todo: remove this method
     public async Task<List<UserDTO>> GetUsers()
     {
-        var users = await _userRepository.GetAllAsync();
+        var users = await _unitOfWork.Users.GetAllAsync();
         List<UserDTO> userDTOs = [];
         foreach (var user in users)
         {
@@ -30,7 +28,7 @@ public class UserService : IUserService
 
     public async Task<UserDTO?> GetUserById(Guid id)
     {
-        var user = await _userRepository.GetAsync(id);
+        var user = await _unitOfWork.Users.GetAsync(id);
         if (user == null)
         {
             return default;

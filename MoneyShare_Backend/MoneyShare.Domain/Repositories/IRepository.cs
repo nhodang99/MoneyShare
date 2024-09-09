@@ -8,6 +8,8 @@ public interface IRepository<TEntity> where TEntity : class
     Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate);
     Task<IEnumerable<TEntity>> GetAllAsync();
 
+    Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
+
     void Add(TEntity entity);
     void AddRange(IEnumerable<TEntity> entities);
 

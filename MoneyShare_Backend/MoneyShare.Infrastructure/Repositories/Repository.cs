@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace MoneyShare.Infrastructure.Repositories;
 
-public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 {
     protected readonly DbContext Context;
 
@@ -39,6 +39,13 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
         return await Context.Set<TEntity>()
             .AsNoTracking()
             .ToListAsync();
+    }
+
+    public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+    {
+        return await Context.Set<TEntity>()
+            .AsNoTracking()
+            .FirstOrDefaultAsync(predicate);
     }
 
     public void Add(TEntity entity)

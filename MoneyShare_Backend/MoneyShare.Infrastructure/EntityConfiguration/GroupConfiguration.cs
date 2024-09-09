@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MoneyShare.Domain.Groups;
 using MoneyShare.Domain.Users;
 
-namespace MoneyShare.Infrastructure.Groups;
+namespace MoneyShare.Infrastructure.EntityConfiguration;
 
 public class GroupConfiguration : IEntityTypeConfiguration<Group>
 {

@@ -4,7 +4,7 @@ using MoneyShare.Domain.Bills;
 using MoneyShare.Domain.Groups;
 using MoneyShare.Domain.Users;
 
-namespace MoneyShare.Infrastructure.Bills;
+namespace MoneyShare.Infrastructure.EntityConfiguration;
 
 public class BillConfiguration : IEntityTypeConfiguration<Bill>
 {

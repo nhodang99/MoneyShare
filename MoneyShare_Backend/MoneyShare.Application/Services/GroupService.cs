@@ -2,21 +2,19 @@
 using MoneyShare.Domain.Users;
 using MoneyShare.Domain.Groups;
 using MoneyShare.Domain.Bills;
-using MoneyShare.Domain.Repositories;
 using MoneyShare.Application.Contracts.Requests;
 using SharedKernel;
+using MoneyShare.Domain;
 
 namespace MoneyShare.Application.Services;
 
 public class GroupService : IGroupService
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IRepository<Group> _groupRepository;
 
     public GroupService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
-        _groupRepository = _unitOfWork.Repository<Group>();
     }
 
     /// <summary>
@@ -26,7 +24,7 @@ public class GroupService : IGroupService
     /// <returns></returns>
     public async Task<Result> AddUsers(AddUsersToGroupReq req)
     {
-        var group = await _groupRepository.GetAsync(req.GroupId);
+        var group = await _unitOfWork.Groups.GetAsync(req.GroupId);
         if (group == null)
         {
             return Result.Failure(GroupErrors.NotFound(req.GroupId));
@@ -34,7 +32,7 @@ public class GroupService : IGroupService
 
         foreach (var userId in req.UserIds)
         {
-            if (await _unitOfWork.Repository<User>().GetAsync(userId) == null)
+            if (await _unitOfWork.Users.GetAsync(userId) == null)
             {
                 return Result.Failure(UserErrors.NotFound(userId));
             }
@@ -52,7 +50,7 @@ public class GroupService : IGroupService
 
     public async Task<bool> RemoveUsers(RemoveUsersFromGroupReq reqBody)
     {
-        var group = await _groupRepository.GetAsync(reqBody.GroupId);
+        var group = await _unitOfWork.Groups.GetAsync(reqBody.GroupId);
         if (group == null)
         {
             return false;

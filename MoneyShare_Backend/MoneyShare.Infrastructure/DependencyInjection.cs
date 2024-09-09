@@ -1,16 +1,12 @@
 ﻿using Infrastructure.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using MoneyShare.Application.Contracts.Authentication;
-using MoneyShare.Domain.Repositories;
-using MoneyShare.Domain.Users;
+using MoneyShare.Domain;
 using MoneyShare.Infrastructure.Database;
-using MoneyShare.Infrastructure.Repositories;
-using MoneyShare.Infrastructure.Users;
 using System.Text;
 
 namespace MoneyShare.Infrastructure;
@@ -39,11 +35,9 @@ public static class DependencyInjection
 
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
-        return services
-            .AddScoped<IUnitOfWork, UnitOfWork>()
-            .AddScoped<IUserRepository, UserRepository>()
-            .AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        return services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
+
     private static IServiceCollection AddAuthenticationInternal(
         this IServiceCollection services,
         IConfiguration configuration)

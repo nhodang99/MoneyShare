@@ -1,4 +1,6 @@
-﻿using SharedKernel;
+﻿using MoneyShare.Domain.Bills;
+using MoneyShare.Domain.Groups;
+using SharedKernel;
 using System.ComponentModel.DataAnnotations;
 
 namespace MoneyShare.Domain.Users;
@@ -18,4 +20,13 @@ public class User : DeleteEntity
     //public required string Password { get; set; }
 
     public string PasswordHash { get; set; } = null!;
+
+    public virtual ICollection<Group> Groups { get; set; } = null!;
+    public virtual ICollection<Bill> Bills { get; set; } = null!;
+
+    public User()
+    {
+        Groups = new HashSet<Group>();
+        Bills = new HashSet<Bill>();
+    }
 }

@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyShare.API", "MoneyShare.API\MoneyShare.API.csproj", "{7C953702-6769-4C44-BC64-EC949FE71E35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyShare.API", "src\MoneyShare.API\MoneyShare.API.csproj", "{7C953702-6769-4C44-BC64-EC949FE71E35}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyShare.Domain", "MoneyShare.Domain\MoneyShare.Domain.csproj", "{D9B6ED5A-BBEB-4D07-830B-227CEEC1B690}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyShare.Domain", "src\MoneyShare.Domain\MoneyShare.Domain.csproj", "{D9B6ED5A-BBEB-4D07-830B-227CEEC1B690}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyShare.Infrastructure", "MoneyShare.Infrastructure\MoneyShare.Infrastructure.csproj", "{4E623B77-68A8-4B18-B7ED-7B07D6E677AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyShare.Infrastructure", "src\MoneyShare.Infrastructure\MoneyShare.Infrastructure.csproj", "{4E623B77-68A8-4B18-B7ED-7B07D6E677AD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyShare.Application", "MoneyShare.Application\MoneyShare.Application.csproj", "{39D56381-E87F-4649-AD63-451A9163B646}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyShare.Application", "src\MoneyShare.Application\MoneyShare.Application.csproj", "{39D56381-E87F-4649-AD63-451A9163B646}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyShare.Application.Contracts", "MoneyShare.Application.Contracts\MoneyShare.Application.Contracts.csproj", "{94B6C976-5B86-403D-BDF2-776DE6426B7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedKernel", "src\SharedKernel\SharedKernel.csproj", "{C025A102-CAEF-4445-BBAA-BD193242A118}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedKernel", "SharedKernel\SharedKernel.csproj", "{C025A102-CAEF-4445-BBAA-BD193242A118}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CD56DAA4-E014-4F1C-9349-2BD454982043}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5484252E-F4FD-4511-86DC-875466797F87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +39,6 @@ Global
 		{39D56381-E87F-4649-AD63-451A9163B646}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39D56381-E87F-4649-AD63-451A9163B646}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39D56381-E87F-4649-AD63-451A9163B646}.Release|Any CPU.Build.0 = Release|Any CPU
-		{94B6C976-5B86-403D-BDF2-776DE6426B7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{94B6C976-5B86-403D-BDF2-776DE6426B7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{94B6C976-5B86-403D-BDF2-776DE6426B7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{94B6C976-5B86-403D-BDF2-776DE6426B7A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C025A102-CAEF-4445-BBAA-BD193242A118}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C025A102-CAEF-4445-BBAA-BD193242A118}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C025A102-CAEF-4445-BBAA-BD193242A118}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -48,6 +46,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7C953702-6769-4C44-BC64-EC949FE71E35} = {CD56DAA4-E014-4F1C-9349-2BD454982043}
+		{D9B6ED5A-BBEB-4D07-830B-227CEEC1B690} = {CD56DAA4-E014-4F1C-9349-2BD454982043}
+		{4E623B77-68A8-4B18-B7ED-7B07D6E677AD} = {CD56DAA4-E014-4F1C-9349-2BD454982043}
+		{39D56381-E87F-4649-AD63-451A9163B646} = {CD56DAA4-E014-4F1C-9349-2BD454982043}
+		{C025A102-CAEF-4445-BBAA-BD193242A118} = {CD56DAA4-E014-4F1C-9349-2BD454982043}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {44246CD1-C2D4-40DE-9337-12EF42FD874A}

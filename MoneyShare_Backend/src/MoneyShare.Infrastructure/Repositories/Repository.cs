@@ -59,7 +59,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
         {
             query = query.AsNoTracking();
         }
-        return await query.SingleOrDefaultAsync(cancellationToken);
+        return await query.SingleOrDefaultAsync(predicate, cancellationToken);
     }
 
     public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity,bool>> predicate,
@@ -72,7 +72,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
         {
             query = query.AsNoTracking();
         }
-        return await query.FirstOrDefaultAsync(cancellationToken);
+        return await query.FirstOrDefaultAsync(predicate, cancellationToken);
     }
 
     public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken)

@@ -2,6 +2,8 @@
 using FluentValidation;
 using MoneyShare.Application.Contracts.Behaviors;
 using MoneyShare.Application.Mapper;
+using MoneyShare.Domain.Interfaces;
+using MoneyShare.Domain.Services;
 
 namespace MoneyShare.Application;
 
@@ -25,6 +27,11 @@ public static class DependencyInjection
             config.AddProfile(new GroupProfile());
             config.AddProfile(new BillProfile());
         });
+
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IBillService, BillService>();
+        services.AddScoped<IGroupService, GroupService>();
 
         return services;
     }

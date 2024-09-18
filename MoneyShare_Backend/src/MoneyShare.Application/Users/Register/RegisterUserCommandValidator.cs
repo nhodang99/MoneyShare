@@ -1,18 +1,20 @@
 ﻿using FluentValidation;
+using MoneyShare.Application.Users.Edit;
 
 namespace MoneyShare.Application.Users.Register;
 
-internal sealed class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
+internal sealed class EditUserCommandValidator : AbstractValidator<EditUserCommand>
 {
-    public RegisterUserCommandValidator()
+    public EditUserCommandValidator()
     {
-        RuleFor(c => c.UserName)
+        RuleFor(u => u.Id).NotEmpty();
+        RuleFor(u => u.UserName)
             .NotEmpty()
             .MaximumLength(50)
             .MinimumLength(3);
 
-        RuleFor(c => c.Email).NotEmpty().EmailAddress();
+        RuleFor(u => u.Email).NotEmpty().EmailAddress();
 
-        RuleFor(c => c.Password).NotEmpty().MinimumLength(8);
+        RuleFor(u => u.Password).NotEmpty().MinimumLength(8);
     }
 }

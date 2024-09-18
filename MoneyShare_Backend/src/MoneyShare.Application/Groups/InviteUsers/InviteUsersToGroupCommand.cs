@@ -1,3 +1,5 @@
-﻿namespace MoneyShare.Application.Groups.InviteUsers;
+﻿using MoneyShare.Application.Contracts.Messaging;
 
-public sealed record InviteUsersToGroupCommand(Guid GroupId, Guid[] UserIds);
+namespace MoneyShare.Application.Groups.InviteUsers;
+
+public sealed record InviteUsersToGroupCommand(Guid GroupId, Guid[] UserIds) : ICommand;

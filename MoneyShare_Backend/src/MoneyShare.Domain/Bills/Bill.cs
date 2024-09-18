@@ -9,7 +9,7 @@ public class Bill : AuditEntity
 {
     public required string Title { get; set; }
     public required decimal Price { get; set; }
-    public BillStatus Status { get; set; }
+    public BillStatus Status { get; set; } = BillStatus.Pending;
 
     public Guid GroupId { get; set; }
 

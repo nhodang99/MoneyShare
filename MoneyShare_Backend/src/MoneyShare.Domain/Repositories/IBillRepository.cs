@@ -4,5 +4,5 @@ namespace MoneyShare.Domain.Repositories;
 
 public interface IBillRepository : IRepository<Bill>
 {
-    IEnumerable<Bill> GetBillsWithGroup(int pageIndex, int pageSize = 10);
+    Task<IEnumerable<Bill>> GetBillsInGroupAsync(Guid groupId, int pageIndex, int pageSize = 10, CancellationToken cancellationToken = default);
 }

@@ -5,10 +5,7 @@ using MoneyShare.Infrastructure.Database;
 
 namespace MoneyShare.Infrastructure.Repositories;
 
-public class UserRepository : Repository<User>, IUserRepository
+public class UserRepository(AppDbContext context) : Repository<User>(context), IUserRepository
 {
-    public UserRepository(AppDbContext context)
-        : base(context) { }
-
     public AppDbContext AppDbContext => (Context as AppDbContext)!;
 }

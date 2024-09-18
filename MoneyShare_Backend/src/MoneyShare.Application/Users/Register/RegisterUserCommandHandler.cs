@@ -1,13 +1,17 @@
 ﻿using MoneyShare.Application.Contracts.Authentication;
 using MoneyShare.Application.Contracts.Messaging;
 using MoneyShare.Domain;
+using MoneyShare.Domain.Interfaces;
 using MoneyShare.Domain.Users;
 using SharedKernel;
 
 namespace MoneyShare.Application.Users.Register;
 
-internal sealed class RegisterUserCommandHandler(IUnitOfWork unitOfWork, IPasswordHasher passwordHasher)
-    : ICommandHandler<RegisterUserCommand, Guid>
+internal sealed class RegisterUserCommandHandler(
+    IUnitOfWork unitOfWork,
+    IPasswordHasher passwordHasher,
+    IAuthenticationService authenticationService)
+: ICommandHandler<RegisterUserCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
     {
@@ -24,13 +28,6 @@ internal sealed class RegisterUserCommandHandler(IUnitOfWork unitOfWork, IPasswo
             PasswordHash = passwordHasher.Hash(command.Password)
         };
 
-        // Todo: raise in the domain layer
-        user.RegisterDomainEvent(new UserRegisteredDomainEvent(user.Id));
-
-        unitOfWork.Users.Add(user);
-
-        await unitOfWork.CommitAsync(cancellationToken);
-
-        return user.Id;
+        return await authenticationService.Register(user, cancellationToken);
     }
 }

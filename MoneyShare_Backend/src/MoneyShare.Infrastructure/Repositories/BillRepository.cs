@@ -5,20 +5,17 @@ using MoneyShare.Infrastructure.Database;
 
 namespace MoneyShare.Infrastructure.Repositories;
 
-public class BillRepository : Repository<Bill>, IBillRepository
+public class BillRepository(AppDbContext context) : Repository<Bill>(context), IBillRepository
 {
-    public BillRepository(AppDbContext context)
-        : base(context) { }
+    public AppDbContext AppDbContext => (Context as AppDbContext)!;
 
-    public IEnumerable<Bill> GetBillsWithGroup(int pageIndex, int pageSize = 10)
+    public async Task<IEnumerable<Bill>> GetBillsInGroupAsync(Guid groupId, int pageIndex, int pageSize = 10, CancellationToken cancellationToken = default)
     {
-        return AppDbContext.Bills
-            .Include(b => b.Group)
-            .OrderBy(b => b.UpdatedDate)
+        return await AppDbContext.Bills
+            .Where(b => b.GroupId == groupId)
+            .OrderByDescending(b => b.UpdatedDate)
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
-            .ToList();
+            .ToListAsync(cancellationToken);
     }
-
-    public AppDbContext AppDbContext => (Context as AppDbContext)!;
 }

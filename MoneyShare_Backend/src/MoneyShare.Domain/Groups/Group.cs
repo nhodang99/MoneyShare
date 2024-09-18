@@ -4,7 +4,7 @@ using SharedKernel;
 
 namespace MoneyShare.Domain.Groups;
 
-public class Group : AuditEntity
+public class Group : AuditEntity, IAggregateRoot
 {
     public required string Name { get; set; }
 

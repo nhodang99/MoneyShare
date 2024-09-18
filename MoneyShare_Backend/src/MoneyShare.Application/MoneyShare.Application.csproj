@@ -18,17 +18,4 @@
     <ProjectReference Include="..\MoneyShare.Domain\MoneyShare.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Bills\Create\" />
-    <Folder Include="Bills\Delete\" />
-    <Folder Include="Bills\Edit\" />
-    <Folder Include="Bills\Complete\" />
-    <Folder Include="Groups\GetById\" />
-    <Folder Include="Groups\Create\" />
-    <Folder Include="Groups\Delete\" />
-    <Folder Include="Groups\Edit\" />
-    <Folder Include="Users\Delete\" />
-    <Folder Include="Users\Edit\" />
-  </ItemGroup>
-
 </Project>

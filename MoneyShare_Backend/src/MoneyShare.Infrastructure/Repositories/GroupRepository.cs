@@ -5,12 +5,7 @@ using MoneyShare.Infrastructure.Database;
 
 namespace MoneyShare.Infrastructure.Repositories;
 
-public class GroupRepository : Repository<Group>, IGroupRepository
+public class GroupRepository(DbContext context) : Repository<Group>(context), IGroupRepository
 {
-    public GroupRepository(DbContext context)
-        : base(context)
-    {
-    }
-
     public AppDbContext AppDbContext => (Context as AppDbContext)!;
 }

@@ -1,3 +1,5 @@
-﻿namespace MoneyShare.Application.Groups.RemoveUsers;
+﻿using MoneyShare.Application.Contracts.Messaging;
 
-public sealed record RemoveUsersFromGroupCommand(Guid GroupId, Guid[] UserIds);
+namespace MoneyShare.Application.Groups.RemoveUsers;
+
+public sealed record RemoveUsersFromGroupCommand(Guid GroupId, Guid[] UserIds) : ICommand;

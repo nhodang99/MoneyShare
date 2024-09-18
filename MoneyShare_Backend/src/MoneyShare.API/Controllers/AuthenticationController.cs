@@ -14,7 +14,7 @@ public class AuthenticationController(IMediator mediator) : Controller
 {
     [HttpPost]
     [Route("login")]
-    public async Task<IResult> Login(LoginUserCommand command)
+    public async Task<IResult> Login([FromBody]LoginUserCommand command)
     {
         Result<string> result = await mediator.Send(command);
 
@@ -23,7 +23,7 @@ public class AuthenticationController(IMediator mediator) : Controller
 
     [HttpPost]
     [Route("register")]
-    public async Task<IResult> Register(RegisterUserCommand command)
+    public async Task<IResult> Register([FromBody]RegisterUserCommand command)
     {
         Result<Guid> result = await mediator.Send(command);
 

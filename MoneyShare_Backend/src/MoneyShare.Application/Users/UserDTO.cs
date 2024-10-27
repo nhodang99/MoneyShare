@@ -1,3 +1,3 @@
 ﻿namespace MoneyShare.Application.Users;
 
-public sealed record UserDTO(Guid Id, string UserName, string Email);
+public sealed record UserDto(Guid Id, string UserName, string Email);

@@ -1,14 +1,17 @@
-﻿using MediatR;
+﻿#region
+
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MoneyShare.API.Extensions;
 using MoneyShare.API.Infrastructure;
-using MoneyShare.Application.Users;
 using MoneyShare.Application.Users.Delete;
 using MoneyShare.Application.Users.Edit;
 using MoneyShare.Application.Users.GetAll;
 using MoneyShare.Application.Users.GetByEmail;
 using MoneyShare.Application.Users.GetById;
-using SharedKernel;
+
+#endregion
 
 namespace MoneyShare.API.Controllers;
 
@@ -16,6 +19,8 @@ namespace MoneyShare.API.Controllers;
 [Route("/users")]
 public class UserController(IMediator mediator) : ControllerBase
 {
+    //[Authorize(Roles = "Admin")]
+    [Authorize]
     [HttpGet]
     public async Task<IResult> GetAllUsers()
     {
@@ -25,41 +30,49 @@ public class UserController(IMediator mediator) : ControllerBase
         return result.Match(Results.Ok, CustomResults.Problem);
     }
 
-    [Route("{userId}")]
+    [Authorize]
+    [Route("{userId:guid}")]
     [HttpGet]
     public async Task<IResult> GetUserById(Guid userId)
     {
         var query = new GetUserByIdQuery(userId);
-        Result<UserDTO> result = await mediator.Send(query);
+        var result = await mediator.Send(query);
 
         return result.Match(Results.Ok, CustomResults.Problem);
     }
 
-    [Route("email={userEmail}")]
+    [Authorize]
+    [Route("email")]
     [HttpGet]
-    public async Task<IResult> GetUserByEmail(string userEmail)
+    public async Task<IResult> GetUserByEmail([FromBody] GetUserByEmailCommand command)
     {
-        var query = new GetUserByEmailQuery(userEmail);
-        Result<UserDTO> result = await mediator.Send(query);
+        if (string.IsNullOrEmpty(command.Email))
+        {
+            return Results.BadRequest(new { message = "Email is required" });
+        }
+
+        var result = await mediator.Send(command);
 
         return result.Match(Results.Ok, CustomResults.Problem);
     }
 
-    [Route("delete/{userId}")]
+    [Authorize]
+    [Route("delete/{userId:guid}")]
     [HttpPost]
     public async Task<IResult> DeleteUserById(Guid userId)
     {
         var command = new DeleteUserCommand(userId);
-        Result result = await mediator.Send(command);
+        var result = await mediator.Send(command);
 
         return result.Match(Results.NoContent, CustomResults.Problem);
     }
 
+    [Authorize]
     [Route("edit")]
     [HttpPost]
-    public async Task<IResult> EditUserById([FromBody]EditUserCommand command)
+    public async Task<IResult> EditUserById([FromBody] EditUserCommand command)
     {
-        Result result = await mediator.Send(command);
+        var result = await mediator.Send(command);
 
         return result.Match(Results.NoContent, CustomResults.Problem);
     }

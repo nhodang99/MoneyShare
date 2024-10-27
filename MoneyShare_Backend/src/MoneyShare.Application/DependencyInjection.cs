@@ -1,9 +1,13 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿#region
+
 using FluentValidation;
-using MoneyShare.Application.Contracts.Behaviors;
+using Microsoft.Extensions.DependencyInjection;
+using MoneyShare.Application.Interfaces.Behaviors;
 using MoneyShare.Application.Mapper;
 using MoneyShare.Domain.Interfaces;
 using MoneyShare.Domain.Services;
+
+#endregion
 
 namespace MoneyShare.Application;
 
@@ -28,10 +32,9 @@ public static class DependencyInjection
             config.AddProfile(new BillProfile());
         });
 
-        services.AddScoped<IAuthenticationService, AuthenticationService>();
-        services.AddScoped<IUserService, UserService>();
-        services.AddScoped<IBillService, BillService>();
-        services.AddScoped<IGroupService, GroupService>();
+        services.AddScoped<IUserDomainService, UserDomainService>();
+        services.AddScoped<IBillDomainService, BillDomainService>();
+        services.AddScoped<IGroupDomainService, GroupDomainService>();
 
         return services;
     }

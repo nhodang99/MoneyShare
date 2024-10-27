@@ -1,5 +1,9 @@
-﻿using MoneyShare.Application.Contracts.Messaging;
+﻿#region
+
+using MoneyShare.Application.Interfaces.Messaging;
+
+#endregion
 
 namespace MoneyShare.Application.Bills.GetAll;
 
-public sealed record GetAllBillsQuery() : IQuery<IEnumerable<BillDTO>>;
+public sealed record GetAllBillsQuery : IQuery<IEnumerable<BillDto>>;

@@ -21,7 +21,7 @@ public class BillController(IMediator mediator) : ControllerBase
     public async Task<IResult> GetAllBills()
     {
         var query = new GetAllBillsQuery();
-        Result<IEnumerable<BillDTO>> result = await mediator.Send(query);
+        Result<IEnumerable<BillDto>> result = await mediator.Send(query);
 
         return result.Match(Results.Ok, CustomResults.Problem);
     }
@@ -31,7 +31,7 @@ public class BillController(IMediator mediator) : ControllerBase
     public async Task<IResult> GetBillById(Guid billId)
     {
         var query = new GetBillByIdQuery(billId);
-        Result<BillDTO> result = await mediator.Send(query);
+        Result<BillDto> result = await mediator.Send(query);
 
         return result.Match(Results.Ok, CustomResults.Problem);
     }

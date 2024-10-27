@@ -1,10 +1,10 @@
-﻿using MediatR;
+﻿#region
+
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MoneyShare.API.Extensions;
 using MoneyShare.API.Infrastructure;
-using MoneyShare.Application.Bills.GetById;
-using MoneyShare.Application.Bills;
-using MoneyShare.Application.Groups;
+using MoneyShare.Application.Bills.GetBillsInGroup;
 using MoneyShare.Application.Groups.Create;
 using MoneyShare.Application.Groups.Delete;
 using MoneyShare.Application.Groups.Edit;
@@ -12,8 +12,8 @@ using MoneyShare.Application.Groups.GetAll;
 using MoneyShare.Application.Groups.GetById;
 using MoneyShare.Application.Groups.InviteUsers;
 using MoneyShare.Application.Groups.RemoveUsers;
-using SharedKernel;
-using MoneyShare.Application.Bills.GetBillsInGroup;
+
+#endregion
 
 namespace MoneyShare.API.Controllers;
 
@@ -25,17 +25,17 @@ public class GroupController(IMediator mediator) : ControllerBase
     public async Task<IResult> GetAllGroups()
     {
         var query = new GetAllGroupsQuery();
-        Result<IEnumerable<GroupDTO>> result = await mediator.Send(query);
+        var result = await mediator.Send(query);
 
         return result.Match(Results.Ok, CustomResults.Problem);
     }
 
-    [Route("{groupId}")]
+    [Route("{groupId:guid}")]
     [HttpGet]
     public async Task<IResult> GetGroupById(Guid groupId)
     {
         var query = new GetGroupByIdQuery(groupId);
-        Result<GroupDTO> result = await mediator.Send(query);
+        var result = await mediator.Send(query);
 
         return result.Match(Results.Ok, CustomResults.Problem);
     }
@@ -51,12 +51,12 @@ public class GroupController(IMediator mediator) : ControllerBase
         return result.Match(Results.Ok, CustomResults.Problem);
     }
 
-    [Route("delete/{groupId}")]
+    [Route("delete/{groupId:guid}")]
     [HttpPost]
     public async Task<IResult> DeleteGroupById(Guid groupId)
     {
         var command = new DeleteGroupCommand(groupId);
-        Result result = await mediator.Send(command);
+        var result = await mediator.Send(command);
 
         return result.Match(Results.NoContent, CustomResults.Problem);
     }
@@ -65,7 +65,7 @@ public class GroupController(IMediator mediator) : ControllerBase
     [HttpPost]
     public async Task<IResult> EditGroupById([FromBody] EditGroupCommand command)
     {
-        Result result = await mediator.Send(command);
+        var result = await mediator.Send(command);
 
         return result.Match(Results.NoContent, CustomResults.Problem);
     }

@@ -1,5 +1,9 @@
-﻿using MoneyShare.Application.Contracts.Messaging;
+﻿#region
+
+using MoneyShare.Application.Interfaces.Messaging;
+
+#endregion
 
 namespace MoneyShare.Application.Groups.GetAll;
 
-public sealed record GetAllGroupsQuery() : IQuery<IEnumerable<GroupDTO>>;
+public sealed record GetAllGroupsQuery : IQuery<IEnumerable<GroupDto>>;

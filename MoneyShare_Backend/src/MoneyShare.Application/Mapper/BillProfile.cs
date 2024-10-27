@@ -10,7 +10,7 @@ public class BillProfile : Profile
 {
     public BillProfile()
     {
-        CreateMap<Bill, BillDTO>();
+        CreateMap<Bill, BillDto>();
         CreateMap<CreateBillCommand, Bill>();
         CreateMap<EditBillCommand, Bill>();
     }

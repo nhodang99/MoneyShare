@@ -1,22 +1,23 @@
-﻿using AutoMapper;
-using MoneyShare.Application.Contracts.Messaging;
+﻿#region
+
+using AutoMapper;
+using MoneyShare.Application.Interfaces.Messaging;
 using MoneyShare.Domain;
 using MoneyShare.Domain.Bills;
 using SharedKernel;
 
+#endregion
+
 namespace MoneyShare.Application.Bills.GetById;
 
 internal sealed class GetBillByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
-    : IQueryHandler<GetBillByIdQuery, BillDTO>
+    : IQueryHandler<GetBillByIdQuery, BillDto>
 {
-    public async Task<Result<BillDTO>> Handle(GetBillByIdQuery query, CancellationToken cancellationToken)
+    public async Task<Result<BillDto>> Handle(GetBillByIdQuery query, CancellationToken cancellationToken)
     {
-        Bill? bill = await unitOfWork.Bills.SingleOrDefaultAsync(b => b.Id == query.BillId, cancellationToken);
-        if (bill is null)
-        {
-            return Result.Failure<BillDTO>(BillErrors.NotFound(query.BillId));
-        }
-
-        return mapper.Map<BillDTO>(bill);
+        var bill = await unitOfWork.Bills.SingleOrDefaultAsync(b => b.Id == query.BillId, cancellationToken);
+        return bill is null
+            ? Result.Failure<BillDto>(BillErrors.NotFound(query.BillId))
+            : mapper.Map<BillDto>(bill);
     }
 }

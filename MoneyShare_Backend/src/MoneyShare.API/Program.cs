@@ -1,7 +1,7 @@
-using MoneyShare.Infrastructure;
-using MoneyShare.Application;
 using MoneyShare.API;
 using MoneyShare.API.Extensions;
+using MoneyShare.Application;
+using MoneyShare.Infrastructure;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

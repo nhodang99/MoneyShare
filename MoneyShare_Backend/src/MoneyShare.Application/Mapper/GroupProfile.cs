@@ -10,7 +10,7 @@ public class GroupProfile : Profile
 {
     public GroupProfile()
     {
-        CreateMap<Group, GroupDTO>();
+        CreateMap<Group, GroupDto>();
         CreateMap<EditGroupCommand, Group>();
         CreateMap<CreateGroupCommand, Group>();
     }

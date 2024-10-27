@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MoneyShare.Domain.Repositories;
+﻿using MoneyShare.Domain.Repositories;
 using MoneyShare.Domain.Users;
 using MoneyShare.Infrastructure.Database;
 

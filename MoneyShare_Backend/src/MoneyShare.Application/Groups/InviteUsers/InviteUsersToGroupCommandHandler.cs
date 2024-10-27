@@ -1,5 +1,9 @@
-﻿using MoneyShare.Application.Contracts.Messaging;
+﻿#region
+
+using MoneyShare.Application.Interfaces.Messaging;
 using SharedKernel;
+
+#endregion
 
 namespace MoneyShare.Application.Groups.InviteUsers;
 

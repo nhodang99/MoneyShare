@@ -1,10 +1,15 @@
-﻿using MediatR;
+﻿#region
+
+using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MoneyShare.API.Extensions;
 using MoneyShare.API.Infrastructure;
-using MoneyShare.Application.Users.Login;
-using MoneyShare.Application.Users.Register;
-using SharedKernel;
+using MoneyShare.Application.Auth.Login;
+using MoneyShare.Application.Auth.Refresh;
+using MoneyShare.Application.Auth.Register;
+
+#endregion
 
 namespace MoneyShare.API.Controllers;
 
@@ -14,18 +19,42 @@ public class AuthenticationController(IMediator mediator) : Controller
 {
     [HttpPost]
     [Route("login")]
-    public async Task<IResult> Login([FromBody]LoginUserCommand command)
+    public async Task<IResult> Login([FromBody] LoginUserCommand command)
     {
-        Result<string> result = await mediator.Send(command);
+        var result = await mediator.Send(command);
 
         return result.Match(Results.Ok, CustomResults.Problem);
     }
 
     [HttpPost]
     [Route("register")]
-    public async Task<IResult> Register([FromBody]RegisterUserCommand command)
+    public async Task<IResult> Register([FromBody] RegisterUserCommand command)
     {
-        Result<Guid> result = await mediator.Send(command);
+        IdentityResult result = await mediator.Send(command);
+
+        if (!result.Succeeded)
+        {
+            return Results.ValidationProblem(result.Errors
+                .GroupBy(e => e.Code)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(e => e.Description).ToArray()
+                ));
+        }
+
+        return Results.Created();
+    }
+
+    [HttpPost]
+    [Route("refresh")]
+    public async Task<IResult> Refresh([FromBody] RefreshTokenCommand command)
+    {
+        if (string.IsNullOrEmpty(command.RefreshToken))
+        {
+            return Results.BadRequest(new { message = "Refresh token is required" });
+        }
+
+        var result = await mediator.Send(command);
 
         return result.Match(Results.Ok, CustomResults.Problem);
     }

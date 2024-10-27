@@ -1,22 +1,23 @@
-﻿using AutoMapper;
-using MoneyShare.Application.Contracts.Messaging;
+﻿#region
+
+using AutoMapper;
+using MoneyShare.Application.Interfaces.Messaging;
 using MoneyShare.Domain;
 using MoneyShare.Domain.Groups;
 using SharedKernel;
 
+#endregion
+
 namespace MoneyShare.Application.Groups.GetById;
 
 internal class GetGroupByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
-    : IQueryHandler<GetGroupByIdQuery, GroupDTO>
+    : IQueryHandler<GetGroupByIdQuery, GroupDto>
 {
-    public async Task<Result<GroupDTO>> Handle(GetGroupByIdQuery query, CancellationToken cancellationToken)
+    public async Task<Result<GroupDto>> Handle(GetGroupByIdQuery query, CancellationToken cancellationToken)
     {
-        Group? group = await unitOfWork.Groups.SingleOrDefaultAsync(g => g.Id == query.Id, cancellationToken);
-        if (group is null)
-        {
-            return Result.Failure<GroupDTO>(GroupErrors.NotFound(query.Id));
-        }
-
-        return mapper.Map<GroupDTO>(group);
+        var group = await unitOfWork.Groups.SingleOrDefaultAsync(g => g.Id == query.Id, cancellationToken);
+        return group is null
+            ? Result.Failure<GroupDto>(GroupErrors.NotFound(query.Id))
+            : mapper.Map<GroupDto>(group);
     }
 }

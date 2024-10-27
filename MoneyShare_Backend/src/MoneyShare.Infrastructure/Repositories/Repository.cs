@@ -19,10 +19,11 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
     /// Return a tracked entity, optimized for ID resolution
     /// </summary>
     /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await Context.Set<TEntity>().FindAsync(id, cancellationToken);
+        return await Context.Set<TEntity>().FindAsync(new object?[] { id, cancellationToken }, cancellationToken);
     }
 
     public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate,
@@ -91,14 +92,15 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 
     public void AddRange(IEnumerable<TEntity> entities)
     {
-        foreach (var entity in entities)
+        var enumerable = entities as TEntity[] ?? entities.ToArray();
+        foreach (var entity in enumerable)
         {
             if (entity is AuditEntity auditEntity)
             {
                 auditEntity.CreatedDate = DateTime.UtcNow;
             }
         }
-        Context.Set<TEntity>().AddRange(entities);
+        Context.Set<TEntity>().AddRange(enumerable);
     }
 
     public void Remove(TEntity entity)
@@ -112,14 +114,15 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 
     public void RemoveRange(IEnumerable<TEntity> entities)
     {
-        foreach (TEntity entity in entities)
+        var enumerable = entities as TEntity[] ?? entities.ToArray();
+        foreach (TEntity entity in enumerable)
         {
             if (entity is DeleteEntity deleteEntity)
             {
                 deleteEntity.IsDeleted = true;
             }
         }
-        Context.Set<TEntity>().RemoveRange(entities);
+        Context.Set<TEntity>().RemoveRange(enumerable);
     }
 
     public void Update(TEntity entity)

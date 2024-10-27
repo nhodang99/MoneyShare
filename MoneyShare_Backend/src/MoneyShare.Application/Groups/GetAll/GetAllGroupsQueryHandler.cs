@@ -1,22 +1,22 @@
-﻿using AutoMapper;
-using MoneyShare.Application.Contracts.Messaging;
+﻿#region
+
+using AutoMapper;
+using MoneyShare.Application.Interfaces.Messaging;
 using MoneyShare.Domain;
 using SharedKernel;
+
+#endregion
 
 namespace MoneyShare.Application.Groups.GetAll;
 
 internal sealed class GetAllGroupsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
-    : IQueryHandler<GetAllGroupsQuery, IEnumerable<GroupDTO>>
+    : IQueryHandler<GetAllGroupsQuery, IEnumerable<GroupDto>>
 {
-    public async Task<Result<IEnumerable<GroupDTO>>> Handle(GetAllGroupsQuery query, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GroupDto>>> Handle(GetAllGroupsQuery query,
+        CancellationToken cancellationToken)
     {
         var groups = await unitOfWork.Groups.GetAllAsync(cancellationToken);
 
-        List<GroupDTO> groupDtos = [];
-        foreach (var group in groups)
-        {
-            groupDtos.Add(mapper.Map<GroupDTO>(group));
-        }
-        return groupDtos.ToList();
+        return groups.Select(mapper.Map<GroupDto>).ToList();
     }
 }

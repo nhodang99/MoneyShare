@@ -1,3 +1,3 @@
 ﻿namespace MoneyShare.Application.Groups;
 
-public sealed record GroupDTO(Guid Id, string Name);
+public sealed record GroupDto(Guid Id, string Name);

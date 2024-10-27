@@ -1,26 +1,26 @@
-﻿using MediatR;
+﻿#region
+
+using MediatR;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MoneyShare.Application.Models;
 using MoneyShare.Domain.Bills;
 using MoneyShare.Domain.Groups;
 using MoneyShare.Domain.Users;
 using SharedKernel;
 
+#endregion
+
 namespace MoneyShare.Infrastructure.Database;
 
-public class AppDbContext : DbContext
+public class AppDbContext(DbContextOptions<AppDbContext> options, IPublisher publisher)
+    : IdentityDbContext<ApplicationUser>(options)
 {
-    public DbSet<User> Users { get; set; }
+    public new DbSet<User> Users { get; set; } // Domain user
     public DbSet<Bill> Bills { get; set; }
     public DbSet<Group> Groups { get; set; }
 
-
-    private readonly IPublisher _publisher;
-
-    public AppDbContext(DbContextOptions<AppDbContext> options, IPublisher publisher)
-        : base(options)
-    {
-        _publisher = publisher;
-    }
+    private readonly IPublisher _publisher = publisher;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -29,6 +29,8 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<Bill>()
             .Property(b => b.Price).HasColumnType("decimal(10, 0)");
 
@@ -38,7 +40,8 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<User>()
             .Property(u => u.UserName).HasMaxLength(50);
 
-        base.OnModelCreating(modelBuilder);
+        // For identity
+        modelBuilder.ApplyConfiguration(new RoleConfiguration());
     }
 
 

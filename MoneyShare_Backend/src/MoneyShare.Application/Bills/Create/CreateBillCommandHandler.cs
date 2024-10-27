@@ -1,8 +1,12 @@
-﻿using AutoMapper;
-using MoneyShare.Application.Contracts.Messaging;
+﻿#region
+
+using AutoMapper;
+using MoneyShare.Application.Interfaces.Messaging;
 using MoneyShare.Domain;
 using MoneyShare.Domain.Bills;
 using SharedKernel;
+
+#endregion
 
 namespace MoneyShare.Application.Bills.Create;
 

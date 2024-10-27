@@ -1,6 +1,7 @@
-@MoneyShare.API_HostAddress = http://localhost:5031
+#@MoneyShare.API_HostAddress = http://localhost:5031
+@MoneyShare.API_HostAddress = http://localhost:59541/swagger
 
-GET {{MoneyShare.API_HostAddress}}/bills/
+GET {{MoneyShare.API_HostAddress}}/users/
 Accept: application/json
 
 ###

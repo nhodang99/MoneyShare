@@ -1,13 +1,17 @@
-﻿using AutoMapper;
-using MoneyShare.Application.Contracts.Messaging;
+﻿#region
+
+using AutoMapper;
+using MoneyShare.Application.Interfaces.Messaging;
 using MoneyShare.Domain;
 using MoneyShare.Domain.Bills;
 using MoneyShare.Domain.Interfaces;
 using SharedKernel;
 
+#endregion
+
 namespace MoneyShare.Application.Bills.Edit;
 
-internal sealed class EditBillCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IBillService billService)
+internal sealed class EditBillCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IBillDomainService billService)
     : ICommandHandler<EditBillCommand>
 {
     public async Task<Result> Handle(EditBillCommand command, CancellationToken cancellationToken)
@@ -17,8 +21,9 @@ internal sealed class EditBillCommandHandler(IUnitOfWork unitOfWork, IMapper map
         {
             return Result.Failure(BillErrors.NotFound(command.Id));
         }
+
         bill = mapper.Map<Bill>(command);
 
-        return await billService.EditBill(bill, cancellationToken);
+        return await billService.EditBillAsync(bill, cancellationToken);
     }
 }

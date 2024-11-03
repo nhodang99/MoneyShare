@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.JsonWebTokens;
 using MoneyShare.Application.Interfaces.Authentication;
 using MoneyShare.Application.Models;
 using MoneyShare.Domain;
@@ -56,6 +57,9 @@ public static class DependencyInjection
 
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddAutoMapper(config => { config.AddProfile(new IdentityProfile()); });
+
+        // Avoid JwtRegisteredClaimNames.Sub auto mapping to ClaimTypes.NameIdentifier
+        JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
         services
             .AddHttpContextAccessor()

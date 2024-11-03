@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoneyShare.Infrastructure.Database;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MoneyShare.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241029165229_Add_SeedData")]
+    partial class Add_SeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,13 +71,13 @@ namespace MoneyShare.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "88f45721-5c4f-41a7-a6b0-166d26471f0f",
+                            Id = "fef49777-5d92-4117-83f5-ac7a4d14f957",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "2208f063-85b6-44d1-a5fe-56af87ea2ca6",
+                            Id = "1aa6e184-4632-4c58-bee0-bc8876b16546",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -169,8 +172,8 @@ namespace MoneyShare.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "787d7c24-4453-46fe-b270-ddbe27ad6c36",
-                            RoleId = "88f45721-5c4f-41a7-a6b0-166d26471f0f"
+                            UserId = "a1eed11e-38d2-42b6-be5f-88689f574137",
+                            RoleId = "fef49777-5d92-4117-83f5-ac7a4d14f957"
                         });
                 });
 
@@ -266,17 +269,16 @@ namespace MoneyShare.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "787d7c24-4453-46fe-b270-ddbe27ad6c36",
+                            Id = "a1eed11e-38d2-42b6-be5f-88689f574137",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d925c1c1-5afc-4cf0-8618-2948b125a9e0",
+                            ConcurrencyStamp = "c2d4e3f1-b73e-44ee-b0e2-1f4e3171913d",
                             Email = "admin@moneyshare.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@MONEYSHARE.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAECe9mA8B3tQUC0tTNz47cT5cvQ2SNuMYkNxRkWp51RqXIosc1u0qKotBB3MuSdbrAg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEL9tGvwGiFnJvhbjTFN1Q5R/ZKKGlP1/7njqNXwLgqJC1gruD6rC9wRt52CxV8o10g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ca851597-6860-46d3-b8ef-b137c15728d3",
+                            SecurityStamp = "0e44cf5b-69a8-4522-b0ec-9154f489c9a1",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });

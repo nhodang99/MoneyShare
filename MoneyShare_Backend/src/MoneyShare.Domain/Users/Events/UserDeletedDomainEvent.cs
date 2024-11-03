@@ -1,5 +1,9 @@
-﻿using SharedKernel;
+﻿#region
+
+using SharedKernel;
+
+#endregion
 
 namespace MoneyShare.Domain.Users.Events;
 
-internal sealed record UserDeletedDomainEvent(Guid UserId) : DomainEvent;
+public sealed record UserDeletedDomainEvent(Guid UserId) : DomainEvent;

@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿#region
+
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MoneyShare.API.Extensions;
 using MoneyShare.API.Infrastructure;
@@ -9,14 +12,19 @@ using MoneyShare.Application.Bills.Delete;
 using MoneyShare.Application.Bills.Edit;
 using MoneyShare.Application.Bills.GetAll;
 using MoneyShare.Application.Bills.GetById;
+using MoneyShare.Application.Models;
 using SharedKernel;
+
+#endregion
 
 namespace MoneyShare.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("/bills")]
 public class BillController(IMediator mediator) : ControllerBase
 {
+    [Authorize(Roles = UserRoles.Admin)]
     [HttpGet]
     public async Task<IResult> GetAllBills()
     {
@@ -26,7 +34,7 @@ public class BillController(IMediator mediator) : ControllerBase
         return result.Match(Results.Ok, CustomResults.Problem);
     }
 
-    [Route("{billId}")]
+    [Route("{billId:guid}")]
     [HttpGet]
     public async Task<IResult> GetBillById(Guid billId)
     {
@@ -36,8 +44,8 @@ public class BillController(IMediator mediator) : ControllerBase
         return result.Match(Results.Ok, CustomResults.Problem);
     }
 
-    [Route("delete/{billId}")]
-    [HttpPost]
+    [Route("delete/{billId:guid}")]
+    [HttpDelete]
     public async Task<IResult> DeleteBillById(Guid billId)
     {
         var command = new DeleteBillCommand(billId);
@@ -64,7 +72,7 @@ public class BillController(IMediator mediator) : ControllerBase
         return result.Match(Results.Ok, CustomResults.Problem);
     }
 
-    [Route("complete/{billId}")]
+    [Route("complete/{billId:guid}")]
     [HttpPost]
     public async Task<IResult> CompleteBill(Guid billId)
     {

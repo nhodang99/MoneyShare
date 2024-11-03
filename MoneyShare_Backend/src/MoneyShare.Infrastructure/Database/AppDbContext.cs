@@ -1,8 +1,10 @@
 ﻿#region
 
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using MoneyShare.Application.Models;
 using MoneyShare.Domain.Bills;
 using MoneyShare.Domain.Groups;
@@ -13,7 +15,10 @@ using SharedKernel;
 
 namespace MoneyShare.Infrastructure.Database;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options, IPublisher publisher)
+public class AppDbContext(
+    DbContextOptions<AppDbContext> options,
+    IPublisher publisher,
+    IConfiguration configuration)
     : IdentityDbContext<ApplicationUser>(options)
 {
     public new DbSet<User> Users { get; set; } // Domain user
@@ -21,6 +26,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IPublisher pub
     public DbSet<Group> Groups { get; set; }
 
     private readonly IPublisher _publisher = publisher;
+    private readonly IConfiguration _configuration = configuration;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -31,6 +37,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IPublisher pub
     {
         base.OnModelCreating(modelBuilder);
 
+        #region Domain entity
+
         modelBuilder.Entity<Bill>()
             .Property(b => b.Price).HasColumnType("decimal(10, 0)");
 
@@ -40,10 +48,46 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IPublisher pub
         modelBuilder.Entity<User>()
             .Property(u => u.UserName).HasMaxLength(50);
 
-        // For identity
-        modelBuilder.ApplyConfiguration(new RoleConfiguration());
-    }
+        #endregion
 
+        #region Identity
+
+        var adminRole = new IdentityRole
+        {
+            Name = "Admin",
+            NormalizedName = "ADMIN"
+        };
+        var userRole = new IdentityRole
+        {
+            Name = "User",
+            NormalizedName = "USER"
+        };
+
+        modelBuilder.Entity<IdentityRole>().HasData(
+            adminRole,
+            userRole);
+
+        var passwordHasher = new PasswordHasher<ApplicationUser>();
+        var adminEmail = _configuration.GetSection("AdminAccount:Email").Value ?? "admin@moneyshare.com";
+        var adminPwd = _configuration.GetSection("AdminAccount:Password").Value ?? "Admin@pa$$w0rd";
+        var adminAccount = new ApplicationUser
+        {
+            UserName = "Admin",
+            NormalizedUserName = "ADMIN",
+            Email = adminEmail,
+            NormalizedEmail = adminEmail.ToUpper(),
+            PasswordHash = passwordHasher.HashPassword(null, adminPwd)
+        };
+        modelBuilder.Entity<ApplicationUser>().HasData(adminAccount);
+        modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+            new IdentityUserRole<string>
+            {
+                RoleId = adminRole.Id,
+                UserId = adminAccount.Id
+            });
+
+        #endregion
+    }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

@@ -1,8 +1,12 @@
-﻿using MediatR;
+﻿#region
+
+using MediatR;
 using Microsoft.Extensions.Logging;
 using MoneyShare.Domain.Users.Events;
 
-namespace MoneyShare.Domain.Users.Handlers;
+#endregion
+
+namespace MoneyShare.Application.DomainEventHandlers;
 
 internal sealed class UserRegisteredDomainEventHandler(ILogger<UserRegisteredDomainEventHandler> logger)
     : INotificationHandler<UserRegisteredDomainEvent>

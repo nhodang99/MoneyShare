@@ -2,6 +2,7 @@
 
 using MoneyShare.Application.Interfaces.Authentication;
 using MoneyShare.Application.Interfaces.Messaging;
+using MoneyShare.Application.Models;
 using MoneyShare.Domain.Users;
 using SharedKernel;
 
@@ -21,7 +22,8 @@ internal sealed class LoginUserCommandHandler(
             return Result.Failure<LoginUserResponse>(UserErrors.NotFoundByEmail);
         }
 
-        var (accessToken, refreshToken) = jwtProvider.Generate(user);
+        var isAdmin = await identityService.IsInRoleAsync(user, UserRoles.Admin);
+        var (accessToken, refreshToken) = jwtProvider.Generate(user, isAdmin);
 
         var result = await identityService.UpdateUserAsync(user);
         if (!result.Succeeded)

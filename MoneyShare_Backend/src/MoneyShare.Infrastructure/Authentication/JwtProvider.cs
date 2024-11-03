@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using MoneyShare.Application.Interfaces.Authentication;
 using MoneyShare.Application.Models;
 using MoneyShare.Infrastructure.Authentication.Options;
+using MoneyShare.Infrastructure.Database;
 
 #endregion
 
@@ -19,20 +20,21 @@ public class JwtProvider(IOptions<JwtOptions> options, IConfiguration configurat
 {
     private readonly JwtOptions _options = options.Value;
 
-    public (string, string) Generate(ApplicationUser user)
+    public (string, string) Generate(ApplicationUser user, bool isAdmin = false)
     {
-        var accessToken = GenerateAccessToken(user);
+        var accessToken = GenerateAccessToken(user, isAdmin);
         var refreshToken = GenerateRefreshToken(user);
 
         return (accessToken, refreshToken);
     }
 
-    private string GenerateAccessToken(ApplicationUser user)
+    private string GenerateAccessToken(ApplicationUser user, bool isAdmin)
     {
         var claims = new Claim[]
         {
             new(JwtRegisteredClaimNames.Sub, user.Id),
-            new(JwtRegisteredClaimNames.Email, user.Email!)
+            new(JwtRegisteredClaimNames.Email, user.Email!),
+            new(ClaimTypes.Role, isAdmin ? UserRoles.Admin : UserRoles.User)
         };
 
         var signingCredentials = new SigningCredentials(

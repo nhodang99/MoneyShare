@@ -1,6 +1,7 @@
 ﻿#region
 
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MoneyShare.API.Extensions;
 using MoneyShare.API.Infrastructure;
@@ -12,15 +13,18 @@ using MoneyShare.Application.Groups.GetAll;
 using MoneyShare.Application.Groups.GetById;
 using MoneyShare.Application.Groups.InviteUsers;
 using MoneyShare.Application.Groups.RemoveUsers;
+using MoneyShare.Application.Models;
 
 #endregion
 
 namespace MoneyShare.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("/groups")]
 public class GroupController(IMediator mediator) : ControllerBase
 {
+    [Authorize(Roles = UserRoles.Admin)]
     [HttpGet]
     public async Task<IResult> GetAllGroups()
     {
@@ -52,7 +56,7 @@ public class GroupController(IMediator mediator) : ControllerBase
     }
 
     [Route("delete/{groupId:guid}")]
-    [HttpPost]
+    [HttpDelete]
     public async Task<IResult> DeleteGroupById(Guid groupId)
     {
         var command = new DeleteGroupCommand(groupId);

@@ -1,7 +1,6 @@
 ﻿#region
 
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MoneyShare.Application.Auth.Login;
@@ -15,8 +14,7 @@ namespace MoneyShare.Infrastructure.Authentication;
 
 public class IdentityService(
     UserManager<ApplicationUser> userManager,
-    IMapper mapper,
-    IHttpContextAccessor httpContextAccessor) : IIdentityService
+    IMapper mapper) : IIdentityService
 {
     public async Task<IdentityResult> RegisterAsync(RegisterUserCommand command)
     {
@@ -87,5 +85,10 @@ public class IdentityService(
     public async Task<IdentityResult> UpdateUserAsync(ApplicationUser user)
     {
         return await userManager.UpdateAsync(user);
+    }
+
+    public async Task<bool> IsInRoleAsync(ApplicationUser user, string role)
+    {
+        return await userManager.IsInRoleAsync(user, role);
     }
 }

@@ -1,8 +1,12 @@
-﻿using MediatR;
+﻿#region
+
+using MediatR;
 using Microsoft.Extensions.Logging;
 using MoneyShare.Domain.Users.Events;
 
-namespace MoneyShare.Domain.Users.Handlers;
+#endregion
+
+namespace MoneyShare.Application.DomainEventHandlers;
 
 internal sealed class UserDeletedDomainEventHandler(ILogger<UserDeletedDomainEventHandler> logger)
     : INotificationHandler<UserDeletedDomainEvent>
@@ -10,7 +14,7 @@ internal sealed class UserDeletedDomainEventHandler(ILogger<UserDeletedDomainEve
     public Task Handle(UserDeletedDomainEvent notification, CancellationToken cancellationToken)
     {
         // TODO: Send an email invitation link. logout...
-        logger.LogDebug("A user registered");
+        logger.LogDebug("A user deleted");
         return Task.CompletedTask;
     }
 }

@@ -8,5 +8,5 @@ namespace MoneyShare.Application.Interfaces.Authentication;
 
 public interface IJwtProvider
 {
-    (string, string) Generate(ApplicationUser user);
+    (string, string) Generate(ApplicationUser user, bool isAdmin);
 }

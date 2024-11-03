@@ -15,4 +15,7 @@ public interface IIdentityService
     Task<ApplicationUser?> LoginAsync(LoginUserCommand command);
     Task<ApplicationUser?> GetUserByRefreshTokenAsync(string refreshToken);
     Task<IdentityResult> UpdateUserAsync(ApplicationUser user);
+
+    Task<bool> IsInRoleAsync(ApplicationUser user, string role);
+    //Task<bool> RemoveUserAsync(ApplicationUser user);
 }

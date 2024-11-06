@@ -17,8 +17,9 @@ internal class RefreshTokenCommandHandler(
         CancellationToken cancellationToken)
     {
         var user = await identityService.GetUserByRefreshTokenAsync(command.RefreshToken);
-        if (user is null ||
-            (user.RefreshToken != command.RefreshToken && !(user.RefreshTokenExpiryTime > DateTime.UtcNow)))
+        if (user is null
+            || user.RefreshToken != command.RefreshToken
+            || !(user.RefreshTokenExpiryTime > DateTime.UtcNow))
         {
             return Result.Failure<RefreshTokenResponse>(new Error(
                 "Auth.Error", "Refresh token invalid", ErrorType.Validation)); // temp error

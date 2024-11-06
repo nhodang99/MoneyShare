@@ -1,8 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿#region
+
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using MoneyShare.Domain.Repositories;
 using SharedKernel;
-using System.Linq.Expressions;
+
+#endregion
 
 namespace MoneyShare.Infrastructure.Repositories;
 
@@ -10,7 +14,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 {
     protected readonly DbContext Context;
 
-    public Repository(DbContext context)
+    protected Repository(DbContext context)
     {
         Context = context;
     }
@@ -36,6 +40,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
         {
             query = query.AsNoTracking();
         }
+
         return await query.ToListAsync(cancellationToken);
     }
 
@@ -47,6 +52,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
         {
             query = query.AsNoTracking();
         }
+
         return await query.ToListAsync(cancellationToken);
     }
 
@@ -60,10 +66,11 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
         {
             query = query.AsNoTracking();
         }
+
         return await query.SingleOrDefaultAsync(predicate, cancellationToken);
     }
 
-    public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity,bool>> predicate,
+    public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate,
         CancellationToken cancellationToken,
         bool tracking = false)
     {
@@ -73,6 +80,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
         {
             query = query.AsNoTracking();
         }
+
         return await query.FirstOrDefaultAsync(predicate, cancellationToken);
     }
 
@@ -87,6 +95,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
         {
             auditEntity.CreatedDate = DateTime.UtcNow;
         }
+
         Context.Set<TEntity>().Add(entity);
     }
 
@@ -100,6 +109,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
                 auditEntity.CreatedDate = DateTime.UtcNow;
             }
         }
+
         Context.Set<TEntity>().AddRange(enumerable);
     }
 
@@ -109,6 +119,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
         {
             deleteEntity.IsDeleted = true;
         }
+
         Context.Set<TEntity>().Remove(entity);
     }
 
@@ -122,6 +133,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
                 deleteEntity.IsDeleted = true;
             }
         }
+
         Context.Set<TEntity>().RemoveRange(enumerable);
     }
 
@@ -131,6 +143,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
         {
             auditEntity.UpdatedDate = DateTime.UtcNow;
         }
+
         Context.Set<TEntity>().Update(entity);
     }
 

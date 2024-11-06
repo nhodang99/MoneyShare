@@ -28,6 +28,7 @@ public class JwtBearerOptionsSetup(IOptions<JwtOptions> jwtOptions) : IConfigure
             ValidAudience = _jwtOptions.Audience,
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)),
+            //ClockSkew = TimeSpan.Zero,
             NameClaimType = JwtRegisteredClaimNames.Sub
         };
     }

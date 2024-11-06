@@ -10,7 +10,6 @@ using Microsoft.IdentityModel.Tokens;
 using MoneyShare.Application.Interfaces.Authentication;
 using MoneyShare.Application.Models;
 using MoneyShare.Infrastructure.Authentication.Options;
-using MoneyShare.Infrastructure.Database;
 
 #endregion
 
@@ -63,7 +62,7 @@ public class JwtProvider(IOptions<JwtOptions> options, IConfiguration configurat
         var refreshToken = Convert.ToBase64String(randomNumber);
 
         user.RefreshToken = refreshToken;
-        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(1);
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(60);
 
         return refreshToken;
     }
